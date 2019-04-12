@@ -1,0 +1,174 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tags and Wranglers &#8212; radical 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Utility Classes and Functions" href="utilitiesAPI.html" />
+    <link rel="prev" title="Detectors" href="detectorsAPI.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="utilitiesAPI.html" title="Utility Classes and Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="detectorsAPI.html" title="Detectors"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">radical 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tags-and-wranglers">
+<h1>Tags and Wranglers<a class="headerlink" href="#tags-and-wranglers" title="Permalink to this headline">¶</a></h1>
+<p>Tags are a custom data-type that help track and organize the various PI attributes, their data, and their units.
+The Wrangler is a sort of container than holds multiple tags.</p>
+<div class="section" id="tag">
+<h2>Tag<a class="headerlink" href="#tag" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="radical.dataIO.PI.wranglers.Tag">
+<em class="property">class </em><code class="descclassname">radical.dataIO.PI.wranglers.</code><code class="descname">Tag</code><span class="sig-paren">(</span><em>name</em>, <em>units=None</em>, <em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.wranglers.Tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is an object that enables the organized packaging of a pulled attribute’s data and units. Typically, the DataProxy
+will receive data in a JSON format. The proxy object can convert to a dataframe and store the data and units for each attribute it pulls from PI
+into a Tag object for safekeeping and transfer.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd><p class="first">name (str) : A name for the tag. This should typically be the actual attribute name from PI.</p>
+<p>units (str): The units of the data, e.g. “m” or “ft”. An exception will be raised if units not listed in the
+available units attribute are provided.</p>
+<p class="last">data (dataframe): Should contain a “Timestamp” column and a “Values” column.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="wrangler">
+<h2>Wrangler<a class="headerlink" href="#wrangler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="radical.dataIO.PI.wranglers.Wrangler">
+<em class="property">class </em><code class="descclassname">radical.dataIO.PI.wranglers.</code><code class="descname">Wrangler</code><a class="headerlink" href="#radical.dataIO.PI.wranglers.Wrangler" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a class that stores and manipulates Tag objects. Simplifies the process of working with large groups of Tags.</p>
+<dl class="method">
+<dt id="radical.dataIO.PI.wranglers.Wrangler.convert_units">
+<code class="descname">convert_units</code><span class="sig-paren">(</span><em>convert_to='imperial'</em>, <em>use_tags=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.wranglers.Wrangler.convert_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will run through all the tag objects, verify their current units, and then convert them to
+the desired units. All tags will be converted if use_tags is left to default None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.dataIO.PI.wranglers.Wrangler.get_tidy_df">
+<code class="descname">get_tidy_df</code><span class="sig-paren">(</span><em>use_tags=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.wranglers.Wrangler.get_tidy_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assembles a ‘tidy’ dataframe for analysis.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>use_tags (list): Optional, a list of tags to use to assemble the tidy dataframe</dd>
+<dt>Returns:</dt>
+<dd>A time-aligned, tidy dataframe.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.dataIO.PI.wranglers.Wrangler.set_alias_using_mapper">
+<code class="descname">set_alias_using_mapper</code><span class="sig-paren">(</span><em>mapper</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.wranglers.Wrangler.set_alias_using_mapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method attaches the standard name that the Detector objects expect to reference. This name is applied
+to the alias attribute. For example, “HookloadActual” name would get an alias name of “hook_load”.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.dataIO.PI.wranglers.Wrangler.verify_units_system_uniformity">
+<code class="descname">verify_units_system_uniformity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.wranglers.Wrangler.verify_units_system_uniformity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method verifies that the units for all tags are metric or imperial, but not both.
+ValueError is raised if units are mixed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tags and Wranglers</a><ul>
+<li><a class="reference internal" href="#tag">Tag</a></li>
+<li><a class="reference internal" href="#wrangler">Wrangler</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="detectorsAPI.html"
+                        title="previous chapter">Detectors</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="utilitiesAPI.html"
+                        title="next chapter">Utility Classes and Functions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/wranglersAPI.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="utilitiesAPI.html" title="Utility Classes and Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="detectorsAPI.html" title="Detectors"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">radical 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Cad Hoyt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

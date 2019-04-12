@@ -1,0 +1,190 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Controllers &#8212; radical 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tags and Wranglers" href="wranglersAPI.html" />
+    <link rel="prev" title="Detectors" href="detectorsAPI.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="wranglersAPI.html" title="Tags and Wranglers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="detectorsAPI.html" title="Detectors"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">radical 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="controllers">
+<h1>Controllers<a class="headerlink" href="#controllers" title="Permalink to this headline">¶</a></h1>
+<p>Controllers link the detector modules to the data sources. They use the Wrangler to move Tags and their data to the desired
+detector. They also handle error notification using the email notification module in the Utilities.</p>
+<div class="section" id="rig-activity-detector-controller">
+<h2>Rig Activity Detector Controller<a class="headerlink" href="#rig-activity-detector-controller" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="radical.detection.controllers.RigActivityDetectorController">
+<em class="property">class </em><code class="descclassname">radical.detection.controllers.</code><code class="descname">RigActivityDetectorController</code><span class="sig-paren">(</span><em>rig</em>, <em>contractor</em>, <em>data_handler</em>, <em>detectors_to_register=None</em>, <em>rig_config=None</em>, <em>tag_mapper=None</em>, <em>max_time_pull='24h'</em>, <em>notify_on_fail=False</em>, <em>local_save_only=True</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.controllers.RigActivityDetectorController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class acts as a coordinator for the various detection algorithms.</p>
+<dl class="method">
+<dt id="radical.detection.controllers.RigActivityDetectorController.generate_connections_report">
+<code class="descname">generate_connections_report</code><span class="sig-paren">(</span><em>msg=None</em>, <em>save_local=True</em>, <em>missed_depths=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.controllers.RigActivityDetectorController.generate_connections_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an HTML report consisting of descriptive statistics for a dataframe containing all the required tags, along
+with plots of the dataframe features. This is useful for debugging detection failures.</p>
+<p>Args:</p>
+<blockquote>
+<div><p>msg (str): An optional message to attach to the HTML report. It will be appended in a paragraph.</p>
+<p>save_local (bool): If True, then a folder will be created (_html) and the output will be written to
+a file in the folder. If False,…</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.controllers.RigActivityDetectorController.prime_detectors">
+<code class="descname">prime_detectors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.controllers.RigActivityDetectorController.prime_detectors" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Iterates through the registered detectors, pulls their required tags, and loads the detector with a dataframe</dt>
+<dd>containing the required tags in the desired units system.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.controllers.RigActivityDetectorController.register_detectors">
+<code class="descname">register_detectors</code><span class="sig-paren">(</span><em>detectors</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.controllers.RigActivityDetectorController.register_detectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers each detector in the list (or a single detector) with the rig activity detector instance. Registration
+consists of storing the actual detector instance, the required tags for the detector, and the detector thresholds in
+a dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.controllers.RigActivityDetectorController.run_detectors">
+<code class="descname">run_detectors</code><span class="sig-paren">(</span><em>start_time=None</em>, <em>end_time=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.controllers.RigActivityDetectorController.run_detectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the detectors over a given time range.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.controllers.RigActivityDetectorController.update_detector_thresholds">
+<code class="descname">update_detector_thresholds</code><span class="sig-paren">(</span><em>aux_thresholds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.controllers.RigActivityDetectorController.update_detector_thresholds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to perform a bulk update of the threshold values important to each detector, e.g. slips_weight for connections detection.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>aux_thresholds (dict): An optional input dictionary containing new thresholds. If None, then rig_config[“thresholds”]
+will automatically be used.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.controllers.RigActivityDetectorController.wrangle_data">
+<code class="descname">wrangle_data</code><span class="sig-paren">(</span><em>start_time</em>, <em>end_time</em>, <em>interval='1s'</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.controllers.RigActivityDetectorController.wrangle_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a dataframe and units dictionary for the items in the tags attribute. The tags should be loaded by
+using the register_detector() method.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>start_time (str): Datetime string for the start of pulling data.
+end_time (str): Datetime string for the end of pulling data.
+interval (str): Interval keyword argument for the interpolation interval. Default to ‘1s’.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="fleet-activity-detector-controller">
+<h2>Fleet Activity Detector Controller<a class="headerlink" href="#fleet-activity-detector-controller" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Controllers</a><ul>
+<li><a class="reference internal" href="#rig-activity-detector-controller">Rig Activity Detector Controller</a></li>
+<li><a class="reference internal" href="#fleet-activity-detector-controller">Fleet Activity Detector Controller</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="detectorsAPI.html"
+                        title="previous chapter">Detectors</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wranglersAPI.html"
+                        title="next chapter">Tags and Wranglers</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/controllersAPI.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="wranglersAPI.html" title="Tags and Wranglers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="detectorsAPI.html" title="Detectors"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">radical 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Cad Hoyt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

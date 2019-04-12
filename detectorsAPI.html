@@ -1,0 +1,274 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Detectors &#8212; radical 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Controllers" href="controllersAPI.html" />
+    <link rel="prev" title="Data Handlers" href="handlersAPI.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="controllersAPI.html" title="Controllers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="handlersAPI.html" title="Data Handlers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">radical 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="detectors">
+<h1>Detectors<a class="headerlink" href="#detectors" title="Permalink to this headline">¶</a></h1>
+<p>Detectors do the heavy lifting in terms of the activity identification process. Each detector is dedicated to detecting
+a single type of activity. For instance, DrillingConnectionsDetector instance will only be concerned with connections made
+while drilling, not tripping. Each Detector is intended to perform a pre-check and a post-check on the incoming data and
+the outgoing data, respectively. The pre-check is meant to restrict the detection attempt to data where success is probably
+likely. The post-check is a form of sanity check to verify that nothing unphysical is being asserted as truth. For example,
+if the hole depth changes by 500’ and only a single connection event is found. This is an impossible scenario given that
+stand lengths are typically only about 90’.</p>
+<div class="section" id="detector-base">
+<h2>Detector Base<a class="headerlink" href="#detector-base" title="Permalink to this headline">¶</a></h2>
+<p>This is parent class that all detectors should inherit from. It is not meant to be directly instantiated.</p>
+<dl class="class">
+<dt id="radical.detection.detectors.DetectorBase">
+<em class="property">class </em><code class="descclassname">radical.detection.detectors.</code><code class="descname">DetectorBase</code><span class="sig-paren">(</span><em>required_tags=None</em>, <em>thresholds={}</em>, <em>name=None</em>, <em>units_system='imperial'</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DetectorBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">radical.detection.detectors.Detector</span></code></p>
+<p>Concrete base class for all Detectors to inherit from.</p>
+<p>Args:</p>
+<blockquote>
+<div><p>required_tags (list): A list of strings denoting the surface measurement tags required performing the detection.</p>
+<p>thresholds (dict): A dictionary of thresholds relevant to the particular detector function, e.g. “slips_weight” threshold
+would have a value that indicates the expected hookload weight when in slips.</p>
+<p>name (str): A custom name for the detector object. Useful for keeping track of several detectors.</p>
+</div></blockquote>
+<dl class="method">
+<dt id="radical.detection.detectors.DetectorBase.add_tag">
+<code class="descname">add_tag</code><span class="sig-paren">(</span><em>tag_name</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DetectorBase.add_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new tag to the instantiated objects internal default required tag list.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>tag_name (str): The new tag name to be added.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.detectors.DetectorBase.drop_tag">
+<code class="descname">drop_tag</code><span class="sig-paren">(</span><em>tag_name</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DetectorBase.drop_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drops a tag from the instantiated objects internal default tag list.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>tag_name (str): The tag name to be dropped.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.detectors.DetectorBase.load_data">
+<code class="descname">load_data</code><span class="sig-paren">(</span><em>data</em>, <em>context=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DetectorBase.load_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the detector with required dataframe and historical context, if any required. It can accept either a
+dictionary or a dataframe or None. The historical context should be a dictionary object, which is originally
+pulled from the particular rigs configuration. For example, a drilling connection detector will need the last good
+connection depth and timestamp to validate continuity.</p>
+<p>Args:</p>
+<blockquote>
+<div><p>data (dict or dataframe) : The data needed for detection of the event, i.e. topside measurements and timestamps.</p>
+<p>context (dict) : A dictionary containing historical context if continuity for the detected events is important. Optional.</p>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div>None</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.detectors.DetectorBase.update_threshold">
+<code class="descname">update_threshold</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DetectorBase.update_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates a single threshold with a new value.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>key (str): The threshold name.
+value (float): The new threshold value.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="drilling-connections-detector">
+<h2>Drilling Connections Detector<a class="headerlink" href="#drilling-connections-detector" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="radical.detection.detectors.DrillingConnectionsDetector">
+<em class="property">class </em><code class="descclassname">radical.detection.detectors.</code><code class="descname">DrillingConnectionsDetector</code><span class="sig-paren">(</span><em>name='Drilling Connections'</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DrillingConnectionsDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#radical.detection.detectors.DetectorBase" title="radical.detection.detectors.DetectorBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">radical.detection.detectors.DetectorBase</span></code></a></p>
+<p>A subclassed detector object dedicated to finding connection events while drilling. Inherits from DetectorBase. This
+will instantiate with a default tag list and default thresholds which can be updated using methods inherited from parent..</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>name (str): A custom name for the ConnectionDetector instance. If not provided, will be automatically set to
+‘drilling_connections_detector’.</dd>
+</dl>
+<dl class="method">
+<dt id="radical.detection.detectors.DrillingConnectionsDetector.auto_tune">
+<code class="descname">auto_tune</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DrillingConnectionsDetector.auto_tune" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method attempts to fix failure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.detectors.DrillingConnectionsDetector.build_detection_features">
+<code class="descname">build_detection_features</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DrillingConnectionsDetector.build_detection_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates features required for connection detection.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.detectors.DrillingConnectionsDetector.filter_df">
+<code class="descname">filter_df</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DrillingConnectionsDetector.filter_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters the dataframe so that detection is performed on regions where conditions were such that a connection
+was likely to have taken place.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.detectors.DrillingConnectionsDetector.find_connection_events">
+<code class="descname">find_connection_events</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DrillingConnectionsDetector.find_connection_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method uses logic to determine where a drilling connection was made.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.detectors.DrillingConnectionsDetector.kde_hkl">
+<code class="descname">kde_hkl</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DrillingConnectionsDetector.kde_hkl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build kernel density estimate for the hookload. Useful in fine-tuning slips threshold.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.detectors.DrillingConnectionsDetector.make_diagnostic_plots">
+<code class="descname">make_diagnostic_plots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DrillingConnectionsDetector.make_diagnostic_plots" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method produces diagnostic plots for troubleshooting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.detectors.DrillingConnectionsDetector.post_run_check">
+<code class="descname">post_run_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DrillingConnectionsDetector.post_run_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method performs a series of post-checks on the connection detection results. It primarily verifies that
+each connection event depth is no farther than about 1 stand length from the next connection event depth.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.detectors.DrillingConnectionsDetector.pre_run_check">
+<code class="descname">pre_run_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DrillingConnectionsDetector.pre_run_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method performs a series of pre-checks on the data to establish a rough state that the rig is in. If
+certain logical conditions are met, then the detector instance’s run_ready attribute will be set to ‘False’, indicating
+the detectors run is not set up for success from the start or that there may be problems with the data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.detection.detectors.DrillingConnectionsDetector.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>max_attempts=3</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.detection.detectors.DrillingConnectionsDetector.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method encapsulates the various methods that should be run in sequential order.
+Step 1: Perform a pre-run check.
+Step 2: Feature Engineering.
+Step 3: Filter the data.
+Step 4: Find connection events.
+Step 5: Perform a post-run check.
+Step 6: Clean up.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Connection note here.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Detectors</a><ul>
+<li><a class="reference internal" href="#detector-base">Detector Base</a></li>
+<li><a class="reference internal" href="#drilling-connections-detector">Drilling Connections Detector</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="handlersAPI.html"
+                        title="previous chapter">Data Handlers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="controllersAPI.html"
+                        title="next chapter">Controllers</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/detectorsAPI.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="controllersAPI.html" title="Controllers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="handlersAPI.html" title="Data Handlers"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">radical 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Cad Hoyt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

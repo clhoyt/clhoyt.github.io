@@ -1,0 +1,209 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Data Handlers &#8212; radical 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Detectors" href="detectorsAPI.html" />
+    <link rel="prev" title="Clients" href="clientsAPI.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="detectorsAPI.html" title="Detectors"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="clientsAPI.html" title="Clients"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">radical 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="data-handlers">
+<h1>Data Handlers<a class="headerlink" href="#data-handlers" title="Permalink to this headline">¶</a></h1>
+<p>Data handlers are the bridge between the web API client and everyone else. They use dependency injection from a client instance to
+retrieve and send data. Handlers use the Wrangler object to store and transport the collected attributes needed as input to the
+detectors.</p>
+<div class="section" id="data-handler-abstract-base-class">
+<h2>Data Handler (Abstract Base Class)<a class="headerlink" href="#data-handler-abstract-base-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="radical.dataIO.PI.data_handlers.DataHandler">
+<em class="property">class </em><code class="descclassname">radical.dataIO.PI.data_handlers.</code><code class="descname">DataHandler</code><a class="headerlink" href="#radical.dataIO.PI.data_handlers.DataHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract base class for data handler objects. Defines the interface for a data handler.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="pi-data-handler">
+<h2>PI Data Handler<a class="headerlink" href="#pi-data-handler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="radical.dataIO.PI.data_handlers.PiDataHandler">
+<em class="property">class </em><code class="descclassname">radical.dataIO.PI.data_handlers.</code><code class="descname">PiDataHandler</code><span class="sig-paren">(</span><em>asset_server</em>, <em>data_server</em>, <em>database</em>, <em>username=None</em>, <em>password=None</em>, <em>client=None</em>, <em>base_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.data_handlers.PiDataHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#radical.dataIO.PI.data_handlers.DataHandler" title="radical.dataIO.PI.data_handlers.DataHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">radical.dataIO.PI.data_handlers.DataHandler</span></code></a></p>
+<p>This class handles the data input/output for all activity detection that uses a PI database to access data.</p>
+<dl class="method">
+<dt id="radical.dataIO.PI.data_handlers.PiDataHandler.format_data">
+<code class="descname">format_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.data_handlers.PiDataHandler.format_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Formats the data back into a JSON structure in preparation for writing back to PI.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.dataIO.PI.data_handlers.PiDataHandler.pull_interpolated_data">
+<code class="descname">pull_interpolated_data</code><span class="sig-paren">(</span><em>tags</em>, <em>start_time</em>, <em>end_time</em>, <em>interval='1s'</em>, <em>alt_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.data_handlers.PiDataHandler.pull_interpolated_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the interpolated time-series data for each tag name in the tags argument and instantiates
+Tag objects for each. The Tag objects are loaded into a Wrangler object for organized storage, conversion, and transport.</p>
+<p>Args:</p>
+<blockquote>
+<div><p>tags (list):  A list of attribute names.</p>
+<p>start_time (str): Start time for data pull window. Formats: &lt;YYYY-MM-DDTHH:MM:SS&gt; or ‘<a href="#id1"><span class="problematic" id="id2">*</span></a>-3d’</p>
+<p>end_time (str): End time for data pull window. Formats: &lt;YYYY-MM-DDTHH:MM:SS&gt; or ‘*’</p>
+<p>interval (str): Interval for the interpolated data, default is ‘1s’.</p>
+<p>alt_path (str): An alternate AF path to use to get to the attribute, if necessary. This will override the internal base path.</p>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div>(Wrangler): A custom type that stores and organizes Tag objects.</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="radical.dataIO.PI.data_handlers.PiDataHandler.verify_connection">
+<code class="descname">verify_connection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.data_handlers.PiDataHandler.verify_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses injected client method to verify the connections to the PI server and database.</p>
+<p>Verifies the connections to data sources. Injected PI client raises exception if one of its required queries fails.
+Returns True if connection is good, returns False if connection can’t be verified. Might be useful for indicating
+a need to save to local if PI server is temporarily down.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="novos-data-handler">
+<h2>NOVOS Data Handler<a class="headerlink" href="#novos-data-handler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="radical.dataIO.PI.data_handlers.NovosDataHandler">
+<em class="property">class </em><code class="descclassname">radical.dataIO.PI.data_handlers.</code><code class="descname">NovosDataHandler</code><span class="sig-paren">(</span><em>asset_server</em>, <em>data_server</em>, <em>username</em>, <em>password</em>, <em>rig=None</em>, <em>contractor=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.data_handlers.NovosDataHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#radical.dataIO.PI.data_handlers.PiDataHandler" title="radical.dataIO.PI.data_handlers.PiDataHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">radical.dataIO.PI.data_handlers.PiDataHandler</span></code></a></p>
+<p>A child class of PiDataProxy specifically designed for dealing with the NOVOS PI AF data structure.</p>
+<dl class="method">
+<dt id="radical.dataIO.PI.data_handlers.NovosDataHandler.set_base_path">
+<code class="descname">set_base_path</code><span class="sig-paren">(</span><em>rig</em>, <em>contractor</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.data_handlers.NovosDataHandler.set_base_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Establishes the AF path pattern commonly used by NOVOS that is required to get to the actual PI attributes.
+AF pattern: \&lt;PI_server&gt;&lt;database&gt;NOVOSContractors&lt;contractor&gt;&lt;rig&gt;</p>
+<p>Args:</p>
+<blockquote>
+<div><p>rig (str): The rig name, e.g. ‘Cactus 160’. Must be a rig that is already in the AF system.</p>
+<p>contractor (str): The contractor name, e.g. ‘Cactus Drilling’. Must be a contractor that is in the AF system.</p>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div>None</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="fake-data-handler">
+<h2>Fake Data Handler<a class="headerlink" href="#fake-data-handler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="radical.dataIO.PI.data_handlers.FakeDataHandler">
+<em class="property">class </em><code class="descclassname">radical.dataIO.PI.data_handlers.</code><code class="descname">FakeDataHandler</code><span class="sig-paren">(</span><em>path_to_data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.data_handlers.FakeDataHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#radical.dataIO.PI.data_handlers.DataHandler" title="radical.dataIO.PI.data_handlers.DataHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">radical.dataIO.PI.data_handlers.DataHandler</span></code></a></p>
+<p>A fake proxy object intended for use in testing.</p>
+<dl class="method">
+<dt id="radical.dataIO.PI.data_handlers.FakeDataHandler.pull_interpolated_data">
+<code class="descname">pull_interpolated_data</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#radical.dataIO.PI.data_handlers.FakeDataHandler.pull_interpolated_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method reads in data from a local csv file and returns it as if it were pulling data from PI.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Data Handlers</a><ul>
+<li><a class="reference internal" href="#data-handler-abstract-base-class">Data Handler (Abstract Base Class)</a></li>
+<li><a class="reference internal" href="#pi-data-handler">PI Data Handler</a></li>
+<li><a class="reference internal" href="#novos-data-handler">NOVOS Data Handler</a></li>
+<li><a class="reference internal" href="#fake-data-handler">Fake Data Handler</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="clientsAPI.html"
+                        title="previous chapter">Clients</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="detectorsAPI.html"
+                        title="next chapter">Detectors</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/handlersAPI.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="detectorsAPI.html" title="Detectors"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="clientsAPI.html" title="Clients"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">radical 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Cad Hoyt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>
