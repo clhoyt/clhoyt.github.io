@@ -1,0 +1,23 @@
+Controllers
+===========
+
+Controllers link the detector modules to the data sources. They use the Wrangler to move Tags and their data to the desired
+detector. They also handle error notification using the email notification module in the Utilities.
+
+
+
+Rig Activity Detector Controller
+--------------------------------
+
+.. autoclass:: radical.detection.controllers.RigActivityDetectorController
+    :members:
+    :show-inheritance:
+
+
+Fleet Activity Detector Controller
+----------------------------------
+
+.. autoclass:: radical.detection.controllers.FleetActivityDetectorController
+    :members:
+    :show-inheritance:
+

@@ -1,0 +1,28 @@
+Detectors
+=========
+
+Detectors do the heavy lifting in terms of the activity identification process. Each detector is dedicated to detecting
+a single type of activity. For instance, DrillingConnectionsDetector instance will only be concerned with connections made
+while drilling, not tripping. Each Detector is intended to perform a pre-check and a post-check on the incoming data and
+the outgoing data, respectively. The pre-check is meant to restrict the detection attempt to data where success is probably
+likely. The post-check is a form of sanity check to verify that nothing unphysical is being asserted as truth. For example,
+if the hole depth changes by 500' and only a single connection event is found. This is an impossible scenario given that
+stand lengths are typically only about 90'.
+
+Detector Base
+-------------
+This is parent class that all detectors should inherit from. It is not meant to be directly instantiated.
+
+.. autoclass:: radical.detection.detectors.DetectorBase
+    :members:
+    :show-inheritance:
+
+
+Drilling Connections Detector
+-----------------------------
+
+.. autoclass:: radical.detection.detectors.DrillingConnectionsDetector
+    :members:
+    :show-inheritance:
+
+.. note:: Connection note here.

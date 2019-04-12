@@ -1,0 +1,33 @@
+Data Handlers
+=============
+Data handlers are the bridge between the web API client and everyone else. They use dependency injection from a client instance to
+retrieve and send data. Handlers use the Wrangler object to store and transport the collected attributes needed as input to the
+detectors.
+
+Data Handler (Abstract Base Class)
+----------------------------------
+
+.. autoclass:: radical.dataIO.PI.data_handlers.DataHandler
+    :members:
+
+PI Data Handler
+---------------
+
+.. autoclass:: radical.dataIO.PI.data_handlers.PiDataHandler
+    :members:
+    :show-inheritance:
+
+NOVOS Data Handler
+------------------
+
+.. autoclass:: radical.dataIO.PI.data_handlers.NovosDataHandler
+    :members:
+    :show-inheritance:
+
+Fake Data Handler
+------------------
+
+.. autoclass:: radical.dataIO.PI.data_handlers.FakeDataHandler
+    :members:
+    :show-inheritance:
+

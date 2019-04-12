@@ -1,0 +1,32 @@
+Proxies
+=============
+Proxies are the bridge between the web API client and everyone else. They use dependency injection from a client instance to
+retrieve and send data. Proxies use the Wrangler object to store and transport the collected attributes.
+
+DataProxy
+---------------
+
+This is an abstract base class that is meant to define the interface for a Proxy object.
+
+.. autoclass:: radical.dataIO.PI.proxies.DataProxy
+    :members:
+
+
+PiDataProxy
+-----------
+
+.. autoclass:: radical.dataIO.PI.proxies.PiDataProxy
+    :members:
+    :show-inheritance:
+
+.. note:: DataHandler note here...
+
+
+NovosDataHandler
+-----------------
+
+.. autoclass:: radical.dataIO.PI.proxies.NovosDataProxy
+    :members:
+    :show-inheritance:
+
+.. note:: DataProxy note here...

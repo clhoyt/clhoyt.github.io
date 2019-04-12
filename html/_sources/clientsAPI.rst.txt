@@ -1,0 +1,27 @@
+
+Clients
+==========
+
+Clients are responsible for all things related to the interaction with the database. In our case, we primarily work with
+OSIsoft PI database. One way to interact with an OSIsoft PI database is through their provided web API. If interaction
+with other types of databases is desired, one must create another client that is suited to that database. It is best practice
+to implement the interface defined by the AbstractClient in a concrete class, such as the PiWebApiClient does. This will ensure
+that the new client can be used by other modules in this package, if needed.
+
+
+Client
+----------
+This is an abstract base class that defines the interface for a client. All subclasses of client must implement this interface.
+
+.. autoclass:: radical.dataIO.clients.AbstractClient
+    :members:
+
+PiWebApiClient
+--------------
+This is a concrete class of the Client abstract base class.
+
+.. autoclass:: radical.dataIO.clients.PiWebApiClient
+    :members:
+    :show-inheritance:
+
+.. note:: This is a note!

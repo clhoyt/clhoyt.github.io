@@ -1,0 +1,5 @@
+Background
+==========
+
+.. include:: ../../README.rst
+
